@@ -11,11 +11,11 @@ import shutil
 # --->>> diary.endex entry will be writen to materials/diary.endex
 class Materials:
 	def __init__(self):
-		# create 32 header bytes from date, time, login
+		# create header from date, login
 		log = getlogin()
 		logsize = len(log)
 		time = gmtime()
-		self.head = bytes(str(time[0]) + str(time[1]) + str(time[2]) + '.' + str(time[3]) + '.' + log + '.')
+		self.head = bytes(str(time[0]) + str(time[1]) + str(time[2]) + '.' + log + '.')
 		self.lenght = len(self.head)
 		self.size = 0
 		# initialize BytesIO
