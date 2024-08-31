@@ -1,10 +1,7 @@
 ### tag.py ###
 ### crypto diary ###
 from io import BytesIO
-from os import getlogin, system
-from time import gmtime, sleep
 import sys
-import shutil
 # Usage
 # $python tag.py
 # $*text text text [ENTER] *text text text [ENTER] *endex
@@ -12,12 +9,7 @@ import shutil
 class Materials:
 	def __init__(self):
 		# create header from date, login
-		log = getlogin()
-		logsize = len(log)
-		time = gmtime()
-		self.head = bytes(str(time[0]) + str(time[1]) + str(time[2]) + '.' + log + '.')
-		self.lenght = len(self.head)
-		self.size = 0
+		self.head = input('message head *').encode()
 		# initialize BytesIO
 		self.stream = BytesIO()
 		# write header to BytesIO
@@ -33,6 +25,10 @@ class Materials:
 			one[0] += a
 			self.stream.write(one)
 
+	def unlock(self):
+		# read the diary per head
+		pass
+
 	def _ciph(self, ordl):
 		# more advanced cryptos here, mw it is +14
 		if ordl + 14 > 255: return ordl + 14 - 256
@@ -44,19 +40,24 @@ class Materials:
 		self.size = sys.getsizeof(self.stream)
 		self.stream.seek(0)
 		with open('materials/diary.endex', 'ab') as diary:
-			diary.write('\n')
-			shutil.copyfileobj(self.stream, diary, length=self.size)
+			diary.write('\n'.encode())
+			diary.write(self.stream.read())
 
 	def put(self):
 		# create textdocument
 		textline = ''
 		while textline != 'endex':
-			textline = raw_input('*')
+			textline = input('*')
 			if textline != 'endex': self._write(textline)
 		self._save()
-		system('clear')
-		print '..diary safed.'
+		print('..diary safed.')
 
 if __name__ == '__main__':
-	m = Materials()
-	m.put()
+
+	if len(sys.argv()) == 1:
+		m = Materials()
+		m.put()
+		exit()
+	elif 'unlock' in sys.argv[1]:
+		pass
+		
